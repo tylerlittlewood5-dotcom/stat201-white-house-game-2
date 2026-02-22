@@ -2,25 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>STAT 201: Vocabulary Race</title>
+    <title>STAT 201: Race to 270</title>
     <style>
         :root { --blue: #002868; --red: #bf0a30; }
         body { font-family: sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .box { max-width: 800px; width: 100%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .box { max-width: 850px; width: 100%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         #map { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin: 20px 0; }
-        .st { aspect-ratio: 1; background: #cbd5e0; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: white; border-radius: 3px; }
+        .st { aspect-ratio: 1; background: #cbd5e0; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: white; border-radius: 3px; font-weight: bold; }
         .st.won { background: #3182ce; }
         .st.lost { background: var(--red); }
         .opt { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; text-align: left; font-size: 1rem; }
-        .opt:hover { background: #f7fafc; }
+        .opt:hover { background: #f7fafc; border-color: var(--blue); }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 <div class="box">
-    <h2 style="text-align:center; color:var(--blue)">STAT 201 VOCABULARY RACE</h2>
+    <h2 style="text-align:center; color:var(--blue)">STAT 201 EXAM 1 REVIEW</h2>
     <div id="start-div" style="text-align:center">
-        <p>Answer vocabulary and math questions from the exam to win the White House!</p>
+        <p>Win 270 Electoral Votes by answering questions from the practice exam.</p>
         <button onclick="start()" style="padding:15px 30px; background:var(--blue); color:white; border:none; cursor:pointer; font-size:1.2rem; border-radius:8px;">START CAMPAIGN</button>
     </div>
     <div id="game-div" class="hidden">
@@ -42,49 +42,62 @@
     ];
 
     const qs = [
-        // VOCABULARY & CONCEPTS
-        {q: "What type of variable is 'Type of Payment' (Visa, Cash)?", a: ["Quantitative", "Categorical", "Identifier"], c: 1},
-        {q: "What type of variable is 'Number of Gallons'?", a: ["Quantitative", "Categorical", "Identifier"], c: 0},
-        {q: "What type of variable is 'Transaction Number'?", a: ["Quantitative", "Categorical", "Identifier"], c: 2},
-        {q: "A Z-score tells you how many ____ a value is from the mean.", a: ["Standard Deviations", "Minutes", "Percentiles"], c: 0},
+        {q: "What type of variable is 'Type of gas'?", a: ["Quantitative", "Categorical", "Identifier"], c: 1},
+        {q: "What type of variable is 'Number of gallons'?", a: ["Quantitative", "Categorical", "Identifier"], c: 0},
+        {q: "What type of variable is 'Transaction number'?", a: ["Quantitative", "Categorical", "Identifier"], c: 2},
+        {q: "What type of variable is 'Type of payment'?", a: ["Quantitative", "Categorical", "Identifier"], c: 1},
+        {q: "What type of variable is 'Day of week'?", a: ["Quantitative", "Categorical", "Identifier"], c: 1},
+        {q: "If 81 people were promoted out of 251, what is the %?", a: ["32.3%", "47.6%", "16.1%"], c: 0},
+        {q: "The median of (63, 64, 65, 67, 74, 75, 80, 82, 85) is:", a: ["74", "67", "75"], c: 0},
+        {q: "Calculate IQR if Q3 = 81 and Q1 = 64.5.", a: ["16.5", "17.0", "21.5"], c: 0},
+        {q: "A Z-score tells us how many ____ a value is from the mean.", a: ["Standard Deviations", "Minutes", "Percentage points"], c: 0},
+        {q: "If a hold time has a Z-score of 1.86, the time is:", a: ["1.86 mins over mean", "1.86 SD above mean"], c: 1},
+        {q: "A customer has a Z-score of -0.55. What % wait LONGER than them?", a: ["29%", "50%", "71%"], c: 2},
         {q: "True or False: The Normal model can be used to describe ALL distributions.", a: ["True", "False"], c: 1},
-        {q: "Which measure of center is the average of all data values?", a: ["Median", "Mean", "Mode"], c: 1},
-        {q: "The distance between the 75th and 25th percentile is the:", a: ["Range", "Standard Deviation", "IQR"], c: 2},
-        {q: "Correlation (r) must be between which two numbers?", a: ["0 and 1", "-1 and 1", "-10 and 10"], c: 1},
-        {q: "In a right-skewed distribution, the tail points toward the:", a: ["Left (smaller values)", "Right (larger values)"], c: 1},
-        {q: "What is the total area under the Normal Curve?", a: ["0.5", "1.0", "100"], c: 1},
-        
-        // SIMPLE MATH FROM TEST
-        {q: "If 81 people were promoted out of 251, what is the percentage?", a: ["32.3%", "47.6%", "16.1%"], c: 0},
-        {q: "What is the Z-score for the Mean?", a: ["1", "0", "-1"], c: 1},
-        {q: "Calculate IQR if Q3 is 81 and Q1 is 64.5.", a: ["16.5", "17", "21"], c: 0},
-        {q: "In the 68-95-99.7 rule, what % is within 2 SD of the mean?", a: ["68%", "95%", "99.7%"], c: 1},
-        {q: "What is the range of a dataset?", a: ["Max - Min", "Q3 - Q1", "Average"], c: 0},
-        {q: "A Z-score of -3.0 is a typical, common value.", a: ["True", "False"], c: 1},
+        {q: "An observation with a Z-score of 0.5 is an outlier.", a: ["True", "False"], c: 1},
+        {q: "The middle 50% of data is found within how many SDs for Normal data?", a: ["Two SD", "Less than one SD", "Exactly three SD"], c: 1},
+        {q: "In a boxplot, the line inside the box is the:", a: ["Mean", "Median", "Mode"], c: 1},
+        {q: "Male shower times are right-skewed. This means the tail points:", a: ["Toward larger values (right)", "Toward smaller values (left)"], c: 0},
+        {q: "Correlation (r) must be between:", a: ["0 and 1", "-1 and 1", "-10 and 10"], c: 1},
         {q: "If r = 1.0, the relationship is:", a: ["Perfect Linear", "No Relationship", "Weak Linear"], c: 0},
-        {q: "Which graph is used to display 2 categorical variables?", a: ["Scatterplot", "Mosaic Plot", "Histogram"], c: 1},
-        {q: "Standard deviation measures the ____ of the data.", a: ["Center", "Spread", "Shape"], c: 1},
-        {q: "A histogram with one peak is called:", a: ["Unimodal", "Bimodal", "Uniform"], c: 0},
-
-        // MORE VOCAB
-        {q: "Is 'Day of Week' (Mon, Tue) Categorical or Quantitative?", a: ["Categorical", "Quantitative"], c: 0},
-        {q: "What is the 50th percentile?", a: ["Mean", "Median", "IQR"], c: 1},
         {q: "True or False: Correlation proves causation.", a: ["True", "False"], c: 1},
-        {q: "Does changing units (inches to feet) change the correlation (r)?", a: ["Yes", "No"], c: 1},
-        {q: "Which is most affected by an outlier?", a: ["Median", "Mean", "IQR"], c: 1},
+        {q: "Which graph displays 2 categorical variables?", a: ["Scatterplot", "Mosaic Plot", "Histogram"], c: 1},
+        {q: "A Z-score of 0 is always the:", a: ["Minimum", "Mean", "Maximum"], c: 1},
+        {q: "In the 68-95-99.7 rule, what % is within 1 SD?", a: ["68%", "95%", "99.7%"], c: 0},
+        {q: "In the 68-95-99.7 rule, what % is within 2 SD?", a: ["68%", "95%", "99.7%"], c: 1},
+        {q: "In the 68-95-99.7 rule, what % is within 3 SD?", a: ["68%", "95%", "99.7%"], c: 2},
+        {q: "The 'Range' is calculated as:", a: ["Max - Min", "Q3 - Q1", "Mean - Median"], c: 0},
+        {q: "Which variable type is 'Inside food sale (Y/n)'?", a: ["Quantitative", "Categorical"], c: 1},
+        {q: "Which variable type is 'Gas purchase in dollars'?", a: ["Quantitative", "Categorical"], c: 0},
+        {q: "Standard deviation measures the ____ of data.", a: ["Center", "Spread", "Shape"], c: 1},
+        {q: "The 50th percentile is also the:", a: ["Mean", "Median", "Mode"], c: 1},
+        {q: "Adding an outlier can change r significantly.", a: ["True", "False"], c: 0},
+        {q: "Changing units (inches to feet) changes r.", a: ["True", "False"], c: 1},
+        {q: "Total area under the Normal Curve is:", a: ["0.5", "1.0", "100"], c: 1},
         {q: "A 'Lurking Variable' can hide a relationship.", a: ["True", "False"], c: 0},
-        {q: "The Normal model is always symmetric.", a: ["True", "False"], c: 0},
-        {q: "In a boxplot, the line in the box is the:", a: ["Mean", "Median"], c: 1},
-        {q: "Scatterplots show the relationship between 2 ____ variables.", a: ["Categorical", "Quantitative"], c: 1},
-        {q: "A Z-score of +2.0 is ____ the mean.", a: ["Above", "Below"], c: 0}
+        {q: "A histogram with one peak is:", a: ["Unimodal", "Bimodal", "Uniform"], c: 0},
+        {q: "A histogram with two peaks is:", a: ["Unimodal", "Bimodal", "Uniform"], c: 1},
+        {q: "Which is most affected by an outlier?", a: ["Mean", "Median", "IQR"], c: 0},
+        {q: "Standardize data into Z-scores change the distribution shape.", a: ["True", "False"], c: 1},
+        {q: "A Z-score of -3.0 is very common.", a: ["True", "False"], c: 1},
+        {q: "Right-skewed data: Median is usually ____ Mean.", a: ["Higher than", "Lower than", "Equal to"], c: 1},
+        {q: "Bar charts are for categorical variables.", a: ["True", "False"], c: 0},
+        {q: "Z-score formula is (Value - Mean) / ____.", a: ["Median", "Standard Deviation", "Range"], c: 1},
+        {q: "What is 100% - 95% from the Empirical Rule?", a: ["5%", "2.5%", "32%"], c: 0},
+        {q: "What is Q3 - Q1?", a: ["Range", "IQR", "SD"], c: 1},
+        {q: "Scatterplots show relationship between 2 ____ variables.", a: ["Categorical", "Quantitative"], c: 1},
+        {q: "Is 'Transaction number' used for calculations?", a: ["Yes", "No (Identifier)"], c: 1},
+        {q: "If Z = 2.0, you are ____ the mean.", a: ["Above", "Below"], c: 0},
+        {q: "If Z = -1.0, you are ____ the mean.", a: ["Above", "Below"], c: 1},
+        {q: "What type of variable is 'Age' in years?", a: ["Quantitative", "Categorical"], c: 0},
+        {q: "Median is resistant to outliers.", a: ["True", "False"], c: 0},
+        {q: "Mean is the average.", a: ["True", "False"], c: 0}
     ];
-    // Fill the rest of the 50 states with these 30 core questions
-    while(qs.length < 50) { qs.push(qs[qs.length % 30]); }
 
     let cur = 0, score = 0;
     function start() { document.getElementById('start-div').classList.add('hidden'); document.getElementById('game-div').classList.remove('hidden'); init(); load(); }
     function init() { const m = document.getElementById('map'); states.forEach((s, i) => { const d = document.createElement('div'); d.className = 'st'; d.id = 's'+i; d.innerText = s.n; m.appendChild(d); }); }
-    function load() { if (score >= 270) { alert("You won the election!"); return; } const s = states[cur], q = qs[cur]; document.getElementById('s-n').innerText = s.n; document.getElementById('s-v').innerText = s.v; document.getElementById('q-txt').innerText = "FOR " + s.n + ": " + q.q; const b = document.getElementById('opt-box'); b.innerHTML = ''; q.a.forEach((o, i) => { const btn = document.createElement('button'); btn.className = 'opt'; btn.innerText = o; btn.onclick = () => check(i); b.appendChild(btn); }); }
+    function load() { if (score >= 270) { alert("You won the election with " + score + " votes!"); return; } if(cur >= 50) { alert("Game Over! Final votes: " + score); return; } const s = states[cur], q = qs[cur]; document.getElementById('s-n').innerText = s.n; document.getElementById('s-v').innerText = s.v; document.getElementById('q-txt').innerText = "FOR " + s.n + ": " + q.q; const b = document.getElementById('opt-box'); b.innerHTML = ''; q.a.forEach((o, i) => { const btn = document.createElement('button'); btn.className = 'opt'; btn.innerText = o; btn.onclick = () => check(i); b.appendChild(btn); }); }
     function check(i) { const f = document.getElementById('fb'); if (i === qs[cur].c) { f.innerText = "CORRECT!"; score += states[cur].v; document.getElementById('s'+cur).classList.add('won'); document.getElementById('score').innerText = score; } else { f.innerText = "WRONG!"; document.getElementById('s'+cur).classList.add('lost'); } cur++; setTimeout(() => { f.innerText = ""; load(); }, 800); }
 </script>
 </body>
