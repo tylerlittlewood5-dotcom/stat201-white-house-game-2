@@ -1,35 +1,52 @@
-body{
-    font-family: Arial;
-    background:#0b1f3a;
-    color:white;
-    text-align:center;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f6f8;
 }
 
-h1{
-    color:#ffd700;
+header {
+  text-align: center;
+  background: #1b3a6f;
+  color: white;
+  padding: 15px;
 }
 
-#scoreboard{
-    display:flex;
-    justify-content:center;
-    gap:40px;
-    font-size:20px;
-    margin:20px;
+.subtitle {
+  margin-top: -10px;
 }
 
-button{
-    padding:12px;
-    margin:8px;
-    font-size:16px;
-    border-radius:8px;
-    border:none;
-    cursor:pointer;
+#main-container {
+  display: flex;
+  gap: 25px;
+  padding: 20px;
 }
 
-.correct{ background:#2ecc71; }
-.wrong{ background:#e74c3c; }
-
-#answers{
-    margin-top:20px;
+#map-section {
+  width: 55%;
 }
 
+#us-map {
+  width: 100%;
+  height: auto;
+  border: 2px solid #ccc;
+  background: white;
+}
+
+#game-section {
+  width: 45%;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+button {
+  padding: 12px 18px;
+  margin-top: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#scoreboard {
+  text-align: center;
+  margin-top: 10px;
+}
