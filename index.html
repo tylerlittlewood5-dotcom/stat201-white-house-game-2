@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>STAT 201: Race to 270</title>
+    <title>STAT 201: Race to the White House</title>
     <style>
         :root { --blue: #002868; --red: #bf0a30; }
         body { font-family: sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
@@ -14,15 +14,18 @@
         .opt { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; text-align: left; font-size: 1rem; }
         .opt:hover { background: #f7fafc; border-color: var(--blue); }
         .hidden { display: none; }
+        .result-screen { text-align: center; padding: 30px; }
     </style>
 </head>
 <body>
 <div class="box">
-    <h2 style="text-align:center; color:var(--blue)">STAT 201 EXAM 1 REVIEW</h2>
+    <h2 id="main-title" style="text-align:center; color:var(--blue)">STAT 201 EXAM 1 REVIEW</h2>
+    
     <div id="start-div" style="text-align:center">
-        <p>Win 270 Electoral Votes by answering questions from the practice exam.</p>
+        <p>Master your Stats knowledge to win 270 Electoral Votes!</p>
         <button onclick="start()" style="padding:15px 30px; background:var(--blue); color:white; border:none; cursor:pointer; font-size:1.2rem; border-radius:8px;">START CAMPAIGN</button>
     </div>
+
     <div id="game-div" class="hidden">
         <div style="display:flex; justify-content:space-between; font-weight:bold; background:#e2e8f0; padding:10px; border-radius:8px;">
             <span>State: <span id="s-n"></span> (<span id="s-v"></span> EV)</span>
@@ -35,7 +38,14 @@
             <div id="fb" style="margin-top:10px; font-weight:bold; text-align:center"></div>
         </div>
     </div>
+
+    <div id="end-div" class="hidden result-screen">
+        <h1 id="end-title"></h1>
+        <p id="end-msg" style="font-size:1.2rem;"></p>
+        <button onclick="location.reload()" style="padding:12px 25px; background:var(--blue); color:white; border:none; cursor:pointer; border-radius:5px;">PLAY AGAIN</button>
+    </div>
 </div>
+
 <script>
     const states = [
         {n:"AL",v:9},{n:"AK",v:3},{n:"AZ",v:11},{n:"AR",v:6},{n:"CA",v:54},{n:"CO",v:10},{n:"CT",v:7},{n:"DE",v:3},{n:"FL",v:30},{n:"GA",v:16},{n:"HI",v:4},{n:"ID",v:4},{n:"IL",v:19},{n:"IN",v:11},{n:"IA",v:6},{n:"KS",v:6},{n:"KY",v:8},{n:"LA",v:8},{n:"ME",v:4},{n:"MD",v:10},{n:"MA",v:11},{n:"MI",v:15},{n:"MN",v:10},{n:"MS",v:6},{n:"MO",v:10},{n:"MT",v:4},{n:"NE",v:5},{n:"NV",v:6},{n:"NH",v:4},{n:"NJ",v:14},{n:"NM",v:5},{n:"NY",v:28},{n:"NC",v:16},{n:"ND",v:3},{n:"OH",v:17},{n:"OK",v:7},{n:"OR",v:8},{n:"PA",v:19},{n:"RI",v:4},{n:"SC",v:9},{n:"SD",v:3},{n:"TN",v:11},{n:"TX",v:40},{n:"UT",v:6},{n:"VT",v:3},{n:"VA",v:13},{n:"WA",v:12},{n:"WV",v:4},{n:"WI",v:10},{n:"WY",v:3}
@@ -45,60 +55,80 @@
         {q: "What type of variable is 'Type of gas'?", a: ["Quantitative", "Categorical", "Identifier"], c: 1},
         {q: "What type of variable is 'Number of gallons'?", a: ["Quantitative", "Categorical", "Identifier"], c: 0},
         {q: "What type of variable is 'Transaction number'?", a: ["Quantitative", "Categorical", "Identifier"], c: 2},
-        {q: "What type of variable is 'Type of payment'?", a: ["Quantitative", "Categorical", "Identifier"], c: 1},
         {q: "What type of variable is 'Day of week'?", a: ["Quantitative", "Categorical", "Identifier"], c: 1},
-        {q: "If 81 people were promoted out of 251, what is the %?", a: ["32.3%", "47.6%", "16.1%"], c: 0},
+        {q: "81 promoted out of 251. What is the approximate %?", a: ["32.3%", "47.6%", "16.1%"], c: 0},
         {q: "The median of (63, 64, 65, 67, 74, 75, 80, 82, 85) is:", a: ["74", "67", "75"], c: 0},
-        {q: "Calculate IQR if Q3 = 81 and Q1 = 64.5.", a: ["16.5", "17.0", "21.5"], c: 0},
-        {q: "A Z-score tells us how many ____ a value is from the mean.", a: ["Standard Deviations", "Minutes", "Percentage points"], c: 0},
-        {q: "If a hold time has a Z-score of 1.86, the time is:", a: ["1.86 mins over mean", "1.86 SD above mean"], c: 1},
-        {q: "A customer has a Z-score of -0.55. What % wait LONGER than them?", a: ["29%", "50%", "71%"], c: 2},
-        {q: "True or False: The Normal model can be used to describe ALL distributions.", a: ["True", "False"], c: 1},
-        {q: "An observation with a Z-score of 0.5 is an outlier.", a: ["True", "False"], c: 1},
-        {q: "The middle 50% of data is found within how many SDs for Normal data?", a: ["Two SD", "Less than one SD", "Exactly three SD"], c: 1},
+        {q: "IQR = Q3 - Q1. If Q3=81 and Q1=64.5, what is IQR?", a: ["16.5", "17.0", "21.5"], c: 0},
+        {q: "Z-score measures the number of ____ a value is from the mean.", a: ["Standard Deviations", "Minutes", "Percentage points"], c: 0},
+        {q: "A Z-score of 1.86 means you are:", a: ["1.86 units over mean", "1.86 SD above the mean"], c: 1},
+        {q: "A Z-score of -0.55 means what % wait LONGER than you?", a: ["29%", "50%", "71%"], c: 2},
+        {q: "True or False: The Normal model is for ALL distributions.", a: ["True", "False"], c: 1},
+        {q: "Middle 50% of Normal data is within how many SDs?", a: ["Less than one SD", "Exactly two SD", "Three SD"], c: 1},
         {q: "In a boxplot, the line inside the box is the:", a: ["Mean", "Median", "Mode"], c: 1},
-        {q: "Male shower times are right-skewed. This means the tail points:", a: ["Toward larger values (right)", "Toward smaller values (left)"], c: 0},
-        {q: "Correlation (r) must be between:", a: ["0 and 1", "-1 and 1", "-10 and 10"], c: 1},
+        {q: "Male shower times are right-skewed. The tail points toward:", a: ["Larger values (right)", "Smaller values (left)"], c: 0},
+        {q: "Correlation (r) is always between which two numbers?", a: ["0 and 1", "-1 and 1", "-10 and 10"], c: 1},
         {q: "If r = 1.0, the relationship is:", a: ["Perfect Linear", "No Relationship", "Weak Linear"], c: 0},
         {q: "True or False: Correlation proves causation.", a: ["True", "False"], c: 1},
-        {q: "Which graph displays 2 categorical variables?", a: ["Scatterplot", "Mosaic Plot", "Histogram"], c: 1},
-        {q: "A Z-score of 0 is always the:", a: ["Minimum", "Mean", "Maximum"], c: 1},
-        {q: "In the 68-95-99.7 rule, what % is within 1 SD?", a: ["68%", "95%", "99.7%"], c: 0},
-        {q: "In the 68-95-99.7 rule, what % is within 2 SD?", a: ["68%", "95%", "99.7%"], c: 1},
-        {q: "In the 68-95-99.7 rule, what % is within 3 SD?", a: ["68%", "95%", "99.7%"], c: 2},
-        {q: "The 'Range' is calculated as:", a: ["Max - Min", "Q3 - Q1", "Mean - Median"], c: 0},
-        {q: "Which variable type is 'Inside food sale (Y/n)'?", a: ["Quantitative", "Categorical"], c: 1},
-        {q: "Which variable type is 'Gas purchase in dollars'?", a: ["Quantitative", "Categorical"], c: 0},
-        {q: "Standard deviation measures the ____ of data.", a: ["Center", "Spread", "Shape"], c: 1},
-        {q: "The 50th percentile is also the:", a: ["Mean", "Median", "Mode"], c: 1},
-        {q: "Adding an outlier can change r significantly.", a: ["True", "False"], c: 0},
-        {q: "Changing units (inches to feet) changes r.", a: ["True", "False"], c: 1},
-        {q: "Total area under the Normal Curve is:", a: ["0.5", "1.0", "100"], c: 1},
-        {q: "A 'Lurking Variable' can hide a relationship.", a: ["True", "False"], c: 0},
-        {q: "A histogram with one peak is:", a: ["Unimodal", "Bimodal", "Uniform"], c: 0},
-        {q: "A histogram with two peaks is:", a: ["Unimodal", "Bimodal", "Uniform"], c: 1},
-        {q: "Which is most affected by an outlier?", a: ["Mean", "Median", "IQR"], c: 0},
-        {q: "Standardize data into Z-scores change the distribution shape.", a: ["True", "False"], c: 1},
-        {q: "A Z-score of -3.0 is very common.", a: ["True", "False"], c: 1},
-        {q: "Right-skewed data: Median is usually ____ Mean.", a: ["Higher than", "Lower than", "Equal to"], c: 1},
-        {q: "Bar charts are for categorical variables.", a: ["True", "False"], c: 0},
-        {q: "Z-score formula is (Value - Mean) / ____.", a: ["Median", "Standard Deviation", "Range"], c: 1},
-        {q: "What is 100% - 95% from the Empirical Rule?", a: ["5%", "2.5%", "32%"], c: 0},
-        {q: "What is Q3 - Q1?", a: ["Range", "IQR", "SD"], c: 1},
-        {q: "Scatterplots show relationship between 2 ____ variables.", a: ["Categorical", "Quantitative"], c: 1},
-        {q: "Is 'Transaction number' used for calculations?", a: ["Yes", "No (Identifier)"], c: 1},
+        {q: "Which graph shows the relationship of 2 categorical variables?", a: ["Scatterplot", "Mosaic Plot", "Histogram"], c: 1},
+        {q: "What is the Z-score for the Mean?", a: ["1.0", "0.0", "-1.0"], c: 1},
+        {q: "Empirical Rule: What % of data is within 1 SD?", a: ["68%", "95%", "99.7%"], c: 0},
+        {q: "Empirical Rule: What % of data is within 2 SD?", a: ["68%", "95%", "99.7%"], c: 1},
+        {q: "Empirical Rule: What % of data is within 3 SD?", a: ["68%", "95%", "99.7%"], c: 2},
+        {q: "The 'Range' is found by calculating:", a: ["Max - Min", "Q3 - Q1", "Mean - Median"], c: 0},
+        {q: "Standard deviation measures the ____ of the data.", a: ["Center", "Spread", "Shape"], c: 1},
+        {q: "The 50th percentile is the same as the:", a: ["Mean", "Median", "Mode"], c: 1},
+        {q: "Adding a large outlier pulls the Mean toward the outlier.", a: ["True", "False"], c: 0},
+        {q: "Total area under the Normal Curve is exactly:", a: ["0.5", "1.0", "100"], c: 1},
+        {q: "A distribution with one peak is:", a: ["Unimodal", "Bimodal", "Uniform"], c: 0},
+        {q: "Which measure is NOT affected by outliers?", a: ["Mean", "Median", "Range"], c: 1},
+        {q: "What is the Z-score of a value 3 SD below the mean?", a: ["3.0", "-3.0", "0.0"], c: 1},
+        {q: "Is 'Transaction Number' a quantitative variable?", a: ["Yes", "No (Identifier)"], c: 1},
+        {q: "Right-skewed data: Median is usually ____ the Mean.", a: ["Higher than", "Lower than", "Equal to"], c: 1},
+        {q: "Standardize (Z-score) = (Value - Mean) / ____.", a: ["SD", "Median", "Range"], c: 0},
+        {q: "Scatterplots are used for 2 ____ variables.", a: ["Categorical", "Quantitative"], c: 1},
         {q: "If Z = 2.0, you are ____ the mean.", a: ["Above", "Below"], c: 0},
-        {q: "If Z = -1.0, you are ____ the mean.", a: ["Above", "Below"], c: 1},
-        {q: "What type of variable is 'Age' in years?", a: ["Quantitative", "Categorical"], c: 0},
-        {q: "Median is resistant to outliers.", a: ["True", "False"], c: 0},
-        {q: "Mean is the average.", a: ["True", "False"], c: 0}
+        {q: "Is 'Type of Payment' a categorical variable?", a: ["Yes", "No"], c: 0},
+        {q: "Correlation (r) is used for linear relationships.", a: ["True", "False"], c: 0},
+        {q: "Z-scores above 3 or below -3 are typically:", a: ["Normal", "Outliers"], c: 1},
+        {q: "Which measure of center is the average?", a: ["Mean", "Median", "Mode"], c: 0},
+        {q: "Does changing units change the correlation r?", a: ["Yes", "No"], c: 1},
+        {q: "Histogram with two peaks is:", a: ["Unimodal", "Bimodal"], c: 1},
+        {q: "Q1 is the ____ percentile.", a: ["25th", "50th", "75th"], c: 0},
+        {q: "Q3 is the ____ percentile.", a: ["25th", "50th", "75th"], c: 2},
+        {q: "What % is outside 2 SDs in the Empirical Rule?", a: ["5%", "32%", "0.3%"], c: 0},
+        {q: "A 'lurking variable' affects correlation.", a: ["True", "False"], c: 0},
+        {q: "Normal distribution is always symmetric.", a: ["True", "False"], c: 0},
+        {q: "Can a standard deviation be negative?", a: ["Yes", "No"], c: 1},
+        {q: "IQR is used for which type of data?", a: ["Normal", "Skewed"], c: 1},
+        {q: "Standard Deviation is used for which type of data?", a: ["Normal", "Skewed"], c: 0},
+        {q: "Is 'Age' usually a quantitative variable?", a: ["Yes", "No"], c: 0}
     ];
 
     let cur = 0, score = 0;
     function start() { document.getElementById('start-div').classList.add('hidden'); document.getElementById('game-div').classList.remove('hidden'); init(); load(); }
-    function init() { const m = document.getElementById('map'); states.forEach((s, i) => { const d = document.createElement('div'); d.className = 'st'; d.id = 's'+i; d.innerText = s.n; m.appendChild(d); }); }
-    function load() { if (score >= 270) { alert("You won the election with " + score + " votes!"); return; } if(cur >= 50) { alert("Game Over! Final votes: " + score); return; } const s = states[cur], q = qs[cur]; document.getElementById('s-n').innerText = s.n; document.getElementById('s-v').innerText = s.v; document.getElementById('q-txt').innerText = "FOR " + s.n + ": " + q.q; const b = document.getElementById('opt-box'); b.innerHTML = ''; q.a.forEach((o, i) => { const btn = document.createElement('button'); btn.className = 'opt'; btn.innerText = o; btn.onclick = () => check(i); b.appendChild(btn); }); }
-    function check(i) { const f = document.getElementById('fb'); if (i === qs[cur].c) { f.innerText = "CORRECT!"; score += states[cur].v; document.getElementById('s'+cur).classList.add('won'); document.getElementById('score').innerText = score; } else { f.innerText = "WRONG!"; document.getElementById('s'+cur).classList.add('lost'); } cur++; setTimeout(() => { f.innerText = ""; load(); }, 800); }
+    function init() { const m = document.getElementById('map'); m.innerHTML = ''; states.forEach((s, i) => { const d = document.createElement('div'); d.className = 'st'; d.id = 's'+i; d.innerText = s.n; m.appendChild(d); }); }
+    function load() { 
+        if(cur >= 50) { endGame(); return; }
+        const s = states[cur], q = qs[cur];
+        document.getElementById('s-n').innerText = s.n; document.getElementById('s-v').innerText = s.v;
+        document.getElementById('q-txt').innerText = "FOR " + s.n + ": " + q.q;
+        const b = document.getElementById('opt-box'); b.innerHTML = '';
+        q.a.forEach((o, i) => { const btn = document.createElement('button'); btn.className = 'opt'; btn.innerText = o; btn.onclick = () => check(i); b.appendChild(btn); }); 
+    }
+    function check(i) { 
+        const f = document.getElementById('fb'); 
+        if (i === qs[cur].c) { f.innerText = "CORRECT!"; score += states[cur].v; document.getElementById('s'+cur).classList.add('won'); document.getElementById('score').innerText = score; } 
+        else { f.innerText = "WRONG!"; document.getElementById('s'+cur).classList.add('lost'); } 
+        cur++; setTimeout(() => { f.innerText = ""; load(); }, 700); 
+    }
+    function endGame() {
+        document.getElementById('game-div').classList.add('hidden');
+        document.getElementById('end-div').classList.remove('hidden');
+        const title = document.getElementById('end-title');
+        const msg = document.getElementById('end-msg');
+        if(score >= 270) { title.innerText = "YOU WON!"; title.style.color = "var(--blue)"; msg.innerText = "Congratulations! You reached 270 Electoral Votes and mastered the material."; }
+        else { title.innerText = "CAMPAIGN OVER"; title.style.color = "var(--red)"; msg.innerText = "You finished with " + score + " votes. You need 270 to win the White House. Keep studying!"; }
+    }
 </script>
 </body>
 </html>
