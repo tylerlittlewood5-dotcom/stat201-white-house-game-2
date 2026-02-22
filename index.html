@@ -3,213 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Race to the White House: STAT 201 Edition</title>
+    <title>Race to the White House: STAT 201 Review</title>
     <style>
         :root {
-            --dem-blue: #0047ab;
-            --rep-red: #d3d3d3; /* Neutral until won */
-            --win-blue: #2a65b1;
-            --white: #ffffff;
+            --usa-blue: #002868;
+            --usa-red: #bf0a30;
+            --bg: #f0f2f5;
+            --state-neutral: #cbd5e0;
+            --state-won: #3182ce;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        header { background: var(--dem-blue); color: white; width: 100%; text-align: center; padding: 1rem 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        #game-container { max-width: 900px; width: 95%; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        header { text-align: center; border-bottom: 4px solid var(--usa-blue); margin-bottom: 20px; padding-bottom: 10px; }
         
-        /* Stats Dashboard */
-        #dashboard { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px; border-bottom: 3px solid #eee; }
-        .score-box { text-align: center; }
-        .votes { font-size: 2.5rem; font-weight: bold; color: var(--dem-blue); }
+        #scoreboard { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #e2e8f0; padding: 15px; border-radius: 10px; }
+        .ev-counter { font-size: 2rem; font-weight: bold; color: var(--usa-blue); }
         
-        /* The Map */
-        #map-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; margin-bottom: 30px; background: #eee; padding: 10px; border-radius: 5px; }
-        .state-chip { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; background: #ccc; border-radius: 3px; cursor: default; color: white; transition: 0.3s; }
-        .state-chip.won { background: var(--win-blue); transform: scale(1.05); }
+        #map-container { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin-bottom: 30px; }
+        .state-box { aspect-ratio: 1; background: var(--state-neutral); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; color: white; border-radius: 4px; transition: 0.4s; }
+        .state-box.won { background: var(--state-won); transform: scale(1.1); box-shadow: 0 0 10px rgba(49, 130, 206, 0.5); }
 
-        /* Quiz Section */
-        #quiz-area { border: 2px solid #0047ab; padding: 20px; border-radius: 10px; position: relative; }
-        .question { font-size: 1.2rem; margin-bottom: 15px; font-weight: 600; }
-        .option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; text-align: left; background: white; transition: 0.2s; }
-        .option:hover { background: #f0f7ff; border-color: var(--dem-blue); }
+        #quiz-section { border: 2px solid var(--usa-blue); padding: 25px; border-radius: 12px; min-height: 250px; }
+        .q-text { font-size: 1.25rem; font-weight: 600; margin-bottom: 20px; line-height: 1.4; }
+        .btn-opt { display: block; width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #edf2f7; border-radius: 8px; background: white; text-align: left; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .btn-opt:hover { border-color: var(--usa-blue); background: #f7fafc; }
         
-        #feedback { font-weight: bold; margin-top: 10px; height: 20px; }
+        #feedback { margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.1rem; height: 1.5rem; }
         .hidden { display: none; }
-        #win-screen { text-align: center; padding: 50px; }
+        .start-screen { text-align: center; padding: 50px; }
+        .start-btn { padding: 15px 40px; font-size: 1.5rem; background: var(--usa-blue); color: white; border: none; border-radius: 50px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>RACE TO THE WHITE HOUSE</h1>
-    <p>STAT 201 Final Review</p>
-</header>
+<div class="container">
+    <header>
+        <h1>STAT 201: Race to the White House</h1>
+        <p>Master the exam to win 270 Electoral Votes</p>
+    </header>
 
-<div id="game-container">
-    <div id="dashboard">
-        <div class="score-box">
-            <div>Current State: <span id="target-state">Alabama</span></div>
-            <div>Value: <span id="state-votes">9</span> EV</div>
+    <div id="start-screen" class="start-screen">
+        <p>Win 50 states by answering 50 unique Stats questions correctly.</p>
+        <button class="start-btn" onclick="startGame()">BEGIN CAMPAIGN</button>
+    </div>
+
+    <div id="game-ui" class="hidden">
+        <div id="scoreboard">
+            <div>
+                <strong>Next State:</strong> <span id="st-name">...</span><br>
+                <strong>Value:</strong> <span id="st-ev">0</span> Electoral Votes
+            </div>
+            <div style="text-align: center">
+                <div class="ev-counter"><span id="total-ev">0</span> / 270</div>
+                <span>ELECTORAL VOTES</span>
+            </div>
         </div>
-        <div class="score-box">
-            <div class="votes"><span id="total-ev">0</span> / 270</div>
-            <div>ELECTORAL VOTES</div>
+
+        <div id="map-container"></div>
+
+        <div id="quiz-section">
+            <div id="q-count" style="color: #718096; font-size: 0.9rem; margin-bottom: 5px;">Question 1 of 50</div>
+            <div id="q-text" class="q-text">Loading question...</div>
+            <div id="options"></div>
+            <div id="feedback"></div>
         </div>
     </div>
 
-    <div id="map-grid">
-        </div>
-
-    <div id="quiz-area">
-        <div id="question-text" class="question">Loading first question...</div>
-        <div id="options-container"></div>
-        <div id="feedback"></div>
-    </div>
-
-    <div id="win-screen" class="hidden">
-        <h1 style="color: var(--dem-blue)">CONGRATULATIONS, MR. PRESIDENT!</h1>
-        <p>You have reached 270 Electoral Votes and mastered your Stats Exam.</p>
-        <button onclick="location.reload()">Play Again</button>
+    <div id="win-screen" class="hidden" style="text-align: center; padding: 40px;">
+        <h1 style="color: var(--usa-blue); font-size: 3rem;">CONGRATULATIONS!</h1>
+        <p style="font-size: 1.5rem;">You've reached 270+ Electoral Votes and are ready for the exam!</p>
+        <button class="start-btn" onclick="location.reload()">REPLAY REVIEW</button>
     </div>
 </div>
 
 <script>
     const states = [
-        {name: "Alabama", ev: 9, code: "AL"}, {name: "Alaska", ev: 3, code: "AK"}, {name: "Arizona", ev: 11, code: "AZ"},
-        {name: "Arkansas", ev: 6, code: "AR"}, {name: "California", ev: 54, code: "CA"}, {name: "Colorado", ev: 10, code: "CO"},
-        {name: "Connecticut", ev: 7, code: "CT"}, {name: "Delaware", ev: 3, code: "DE"}, {name: "Florida", ev: 30, code: "FL"},
-        {name: "Georgia", ev: 16, code: "GA"}, {name: "Hawaii", ev: 4, code: "HI"}, {name: "Idaho", ev: 4, code: "ID"},
-        {name: "Illinois", ev: 19, code: "IL"}, {name: "Indiana", ev: 11, code: "IN"}, {name: "Iowa", ev: 6, code: "IA"},
-        {name: "Kansas", ev: 6, code: "KS"}, {name: "Kentucky", ev: 8, code: "KY"}, {name: "Louisiana", ev: 8, code: "LA"},
-        {name: "Maine", ev: 4, code: "ME"}, {name: "Maryland", ev: 10, code: "MD"}, {name: "Massachusetts", ev: 11, code: "MA"},
-        {name: "Michigan", ev: 15, code: "MI"}, {name: "Minnesota", ev: 10, code: "MN"}, {name: "Mississippi", ev: 6, code: "MS"},
-        {name: "Missouri", ev: 10, code: "MO"}, {name: "Montana", ev: 4, code: "MT"}, {name: "Nebraska", ev: 5, code: "NE"},
-        {name: "Nevada", ev: 6, code: "NV"}, {name: "New Hampshire", ev: 4, code: "NH"}, {name: "New Jersey", ev: 14, code: "NJ"},
-        {name: "New Mexico", ev: 5, code: "NM"}, {name: "New York", ev: 28, code: "NY"}, {name: "North Carolina", ev: 16, code: "NC"},
-        {name: "North Dakota", ev: 3, code: "ND"}, {name: "Ohio", ev: 17, code: "OH"}, {name: "Oklahoma", ev: 7, code: "OK"},
-        {name: "Oregon", ev: 8, code: "OR"}, {name: "Pennsylvania", ev: 19, code: "PA"}, {name: "Rhode Island", ev: 4, code: "RI"},
-        {name: "South Carolina", ev: 9, code: "SC"}, {name: "South Dakota", ev: 3, code: "SD"}, {name: "Tennessee", ev: 11, code: "TN"},
-        {name: "Texas", ev: 40, code: "TX"}, {name: "Utah", ev: 6, code: "UT"}, {name: "Vermont", ev: 3, code: "VT"},
-        {name: "Virginia", ev: 13, code: "VA"}, {name: "Washington", ev: 12, code: "WA"}, {name: "West Virginia", ev: 4, code: "WV"},
-        {name: "Wisconsin", ev: 10, code: "WI"}, {name: "Wyoming", ev: 3, code: "WY"}
+        {n: "Alabama", v: 9, c: "AL"}, {n: "Alaska", v: 3, c: "AK"}, {n: "Arizona", v: 11, c: "AZ"}, {n: "Arkansas", v: 6, c: "AR"}, {n: "California", v: 54, c: "CA"}, {n: "Colorado", v: 10, c: "CO"}, {n: "Connecticut", v: 7, c: "CT"}, {n: "Delaware", v: 3, c: "DE"}, {n: "Florida", v: 30, c: "FL"}, {n: "Georgia", v: 16, c: "GA"}, {n: "Hawaii", v: 4, c: "HI"}, {n: "Idaho", v: 4, c: "ID"}, {n: "Illinois", v: 19, c: "IL"}, {n: "Indiana", v: 11, c: "IN"}, {n: "Iowa", v: 6, c: "IA"}, {n: "Kansas", v: 6, c: "KS"}, {n: "Kentucky", v: 8, c: "KY"}, {n: "Louisiana", v: 8, c: "LA"}, {n: "Maine", v: 4, c: "ME"}, {n: "Maryland", v: 10, c: "MD"}, {n: "Massachusetts", v: 11, c: "MA"}, {n: "Michigan", v: 15, c: "MI"}, {n: "Minnesota", v: 10, c: "MN"}, {n: "Mississippi", v: 6, c: "MS"}, {n: "Missouri", v: 10, c: "MO"}, {n: "Montana", v: 4, c: "MT"}, {n: "Nebraska", v: 5, c: "NE"}, {n: "Nevada", v: 6, c: "NV"}, {n: "New Hampshire", v: 4, c: "NH"}, {n: "New Jersey", v: 14, c: "NJ"}, {n: "New Mexico", v: 5, c: "NM"}, {n: "New York", v: 28, c: "NY"}, {n: "North Carolina", v: 16, c: "NC"}, {n: "North Dakota", v: 3, c: "ND"}, {n: "Ohio", v: 17, c: "OH"}, {n: "Oklahoma", v: 7, c: "OK"}, {n: "Oregon", v: 8, c: "OR"}, {n: "Pennsylvania", v: 19, c: "PA"}, {n: "Rhode Island", v: 4, c: "RI"}, {n: "South Carolina", v: 9, c: "SC"}, {n: "South Dakota", v: 3, c: "SD"}, {n: "Tennessee", v: 11, c: "TN"}, {n: "Texas", v: 40, c: "TX"}, {n: "Utah", v: 6, c: "UT"}, {n: "Vermont", v: 3, c: "VT"}, {n: "Virginia", v: 13, c: "VA"}, {n: "Washington", v: 12, c: "WA"}, {n: "West Virginia", v: 4, c: "WV"}, {n: "Wisconsin", v: 10, c: "WI"}, {n: "Wyoming", v: 3, c: "WY"}
     ];
 
     const questions = [
-        { q: "What is a Z-score of 0 indicating?", a: ["Exactly at the mean", "One SD above mean", "An outlier", "Impossible"], correct: 0 },
-        { q: "Which variable is 'Type of Payment' (Visa, Cash)?", a: ["Quantitative", "Categorical", "Identifier", "Continuous"], correct: 1 },
-        { q: "The middle 50% of data is found within the:", a: ["Standard Deviation", "Range", "IQR", "Z-score"], correct: 2 },
-        { q: "A distribution with a long tail to the right is:", a: ["Left-skewed", "Symmetric", "Normal", "Right-skewed"], correct: 3 },
-        { q: "Which value is resistant to outliers?", a: ["Mean", "Median", "Range", "Standard Deviation"], correct: 1 },
-        { q: "If Z = 2.0, the value is how many SDs from the mean?", a: ["1", "2", "0.5", "4"], correct: 1 },
-        { q: "Correlation (r) must be between which values?", a: ["0 and 1", "-1 and 1", "0 and 100", "-Infinity and Infinity"], correct: 1 },
-        { q: "What does r = 0 indicate?", a: ["Strong linear relationship", "No relationship", "No linear relationship", "Perfect balance"], correct: 2 },
-        { q: "The 68-95-99.7 rule applies to what model?", a: ["Skewed", "Normal", "Bimodal", "Uniform"], correct: 1 },
-        { q: "IQR is calculated as:", a: ["Q3 - Q1", "Mean - Median", "Max - Min", "Q2 - Q1"], correct: 0 },
-        { q: "A correlation of -0.98 is considered:", a: ["Weak negative", "Strong positive", "Strong negative", "Non-existent"], correct: 2 },
-        { q: "Does correlation imply causation?", a: ["Always", "Never", "Usually", "Only if r > 0.9"], correct: 1 },
-        { q: "What is 'Transaction Number' classified as?", a: ["Quantitative", "Categorical", "Identifier", "Ordinal"], correct: 2 },
-        { q: "A Z-score of -3.0 is usually considered:", a: ["Average", "Normal", "An Outlier", "Impossible"], correct: 2 },
-        { q: "In a right-skewed distribution, the mean is usually:", a: ["Lower than median", "Equal to median", "Greater than median", "Zero"], correct: 2 },
-        { q: "The 'Number of Gallons' is which variable type?", a: ["Categorical", "Quantitative", "Identifier", "Nominal"], correct: 1 },
-        { q: "What is the 50th percentile?", a: ["The Mean", "The Median", "The Q3", "The SD"], correct: 1 },
-        { q: "A Mosaic Plot is used for which variables?", a: ["Two Quantitative", "Two Categorical", "One of each", "Identifier only"], correct: 1 },
-        { q: "A scatterplot showing a 'cloud' of points has an r near:", a: ["1.0", "-1.0", "0.0", "0.5"], correct: 2 },
-        { q: "Standard deviation measures:", a: ["Center", "Spread", "Shape", "Bias"], correct: 1 },
-        { q: "Removing an outlier that falls far from the regression line will likely:", a: ["Decrease r", "Not change r", "Increase r", "Change the mean only"], correct: 2 },
-        { q: "Which of these can be negative?", a: ["Standard Deviation", "IQR", "Z-score", "Range"], correct: 2 },
-        { q: "The area under the entire Normal Curve is:", a: ["0.5", "1.0", "100", "Varies"], correct: 1 },
-        { q: "A Z-score tells us the number of ____ a value is from the mean.", a: ["Integers", "Standard Deviations", "Percentiles", "Medians"], correct: 1 },
-        { q: "Which plot is best for comparing distributions across groups?", a: ["Scatterplot", "Side-by-side Boxplots", "Pie Chart", "Time series"], correct: 1 },
-        { q: "What is the Q1 percentile?", a: ["25th", "50th", "75th", "10th"], correct: 0 },
-        { q: "A value with Z = 1.96 in a normal model has how much area to its left?", a: ["50%", "95%", "97.5%", "2.5%"], correct: 2 },
-        { q: "Correlation is sensitive to:", a: ["Median", "Outliers", "The Mean", "Variable units"], correct: 1 },
-        { q: "If you add 10 to every value in a set, the SD:", a: ["Increases by 10", "Stays the same", "Doubles", "Decreases"], correct: 1 },
-        { q: "Categorical variables are also called:", a: ["Numerical", "Qualitative", "Quantitative", "Identifier"], correct: 1 },
-        { q: "The 'Range' is:", a: ["Max + Min", "Max - Min", "Q3 - Q1", "Average"], correct: 1 },
-        { q: "What is the Z-score for the mean?", a: ["1", "0", "-1", "Depends on data"], correct: 1 },
-        { q: "Boxplots show which 'Summary'?", a: ["Three-number", "Four-number", "Five-number", "Mean-SD"], correct: 2 },
-        { q: "If r = 1, the points in a scatterplot:", a: ["Are in a circle", "Are in a perfect line", "Are random", "Are horizontal"], correct: 1 },
-        { q: "The IQR contains what percentage of data?", a: ["25%", "50%", "75%", "95%"], correct: 1 },
-        { q: "Which is NOT a condition for Correlation?", a: ["Quantitative variables", "Linearity", "No Outliers", "Normality"], correct: 3 },
-        { q: "A Z-score of 1.0 means the value is ____ the mean.", a: ["Below", "Above", "At", "Twice"], correct: 1 },
-        { q: "Which describes a 'Bimodal' distribution?", a: ["One peak", "Two peaks", "No peaks", "Flat"], correct: 1 },
-        { q: "What is 'Day of Week' (Mon, Tue)?", a: ["Quantitative", "Categorical", "Identifier", "Continuous"], correct: 1 },
-        { q: "If data is converted to Z-scores, the new mean is:", a: ["1", "0", "Original mean", "100"], correct: 1 },
-        { q: "In a Normal model, what % is within 2 SD of the mean?", a: ["68%", "95%", "99.7%", "50%"], correct: 1 },
-        { q: "Which is most affected by a single extreme outlier?", a: ["Median", "Mean", "IQR", "Mode"], correct: 1 },
-        { q: "A vertical line in a Boxplot represents:", a: ["The Mean", "The Median", "The Q1", "The Range"], correct: 1 },
-        { q: "What happens to r if you switch x and y axes?", a: ["Becomes negative", "Changes to 0", "Stays the same", "Doubles"], correct: 2 },
-        { q: "Quantitative variables must have:", a: ["Units", "Names", "Categories", "Z-scores"], correct: 0 },
-        { q: "The sum of probabilities in a distribution must be:", a: ["0", "1", "0.5", "100"], correct: 1 },
-        { q: "A 'Lurking Variable' can:", a: ["Improve r", "Hide a relationship", "Create a false correlation", "All of the above"], correct: 3 },
-        { q: "If Z = -1.0, what % of data is below you (approx)?", a: ["16%", "32%", "50%", "84%"], correct: 0 },
-        { q: "A 'Skewed Left' tail points toward:", a: ["Smaller values", "Larger values", "The Mean", "The Center"], correct: 0 },
-        { q: "To 'Standardize' a value, you subtract the mean and divide by:", a: ["Median", "IQR", "Standard Deviation", "Sample Size"], correct: 2 }
+        // Topic: Variable Types (1-8)
+        {q: "Which variable is 'Type of Payment' (Visa, Cash)?", a: ["Quantitative", "Categorical", "Identifier"], ci: 1},
+        {q: "Which variable is 'Gas purchase in dollars'?", a: ["Quantitative", "Categorical", "Identifier"], ci: 0},
+        {q: "What type of variable is a 'Transaction Number'?", a: ["Quantitative", "Categorical", "Identifier"], ci: 2},
+        {q: "Which of these is a Quantitative variable?", a: ["Type of Gas", "Day of Week", "Number of Gallons"], ci: 2},
+        {q: "Is 'Inside food sale (Yes/No)' Categorical or Quantitative?", a: ["Categorical", "Quantitative"], ci: 0},
+        {q: "Student ID numbers are which type of variable?", a: ["Quantitative", "Categorical", "Identifier"], ci: 2},
+        {q: "A person's weight in pounds is what type of variable?", a: ["Quantitative", "Categorical", "Identifier"], ci: 0},
+        {q: "The color of a car is which variable type?", a: ["Quantitative", "Categorical", "Identifier"], ci: 1},
+        
+        // Topic: Center & Spread (9-18)
+        {q: "If a data set is skewed right, usually:", a: ["Mean < Median", "Mean > Median", "Mean = Median"], ci: 1},
+        {q: "The distance between the 75th and 25th percentile is the:", a: ["Range", "Standard Deviation", "IQR"], ci: 2},
+        {q: "Which measure is NOT resistant to outliers?", a: ["Median", "Mean", "IQR"], ci: 1},
+        {q: "What is the median of this sample: 10, 20, 30, 40, 50?", a: ["20", "30", "40", "25"], ci: 1},
+        {q: "The 'Five Number Summary' includes Min, Q1, Median, Q3, and...", a: ["Mean", "Standard Deviation", "Max"], ci: 2},
+        {q: "If IQR is 10, and Q1 is 50, what is Q3?", a: ["40", "60", "70", "100"], ci: 1},
+        {q: "What measure of spread should be used for skewed data?", a: ["Standard Deviation", "IQR", "Range"], ci: 1},
+        {q: "Standard Deviation should be used to describe center when data is...", a: ["Skewed", "Normal/Symmetric", "Bimodal"], ci: 1},
+        {q: "In a symmetric distribution, where are the mean and median?", a: ["Far apart", "Approximately equal", "Mean is higher"], ci: 1},
+        {q: "A large outlier at the high end of a dataset will inflate the:", a: ["Median", "Mode", "Mean"], ci: 2},
+
+        // Topic: Z-Scores & Normal Model (19-30)
+        {q: "Calculate Betty's Z-score: Hold time 7.5, Mean 4.9, SD 1.4.", a: ["1.86", "2.34", "1.50", "0.85"], ci: 0},
+        {q: "A Z-score of -1.5 indicates a value is:", a: ["1.5 SD above mean", "1.5 SD below mean", "An outlier"], ci: 1},
+        {q: "Using the 68-95-99.7 rule, what % is within 1 SD of the mean?", a: ["50%", "68%", "95%", "99.7%"], ci: 1},
+        {q: "What % of data is between Z = -2 and Z = +2?", a: ["68%", "90%", "95%", "99.7%"], ci: 2},
+        {q: "What is the Z-score of the Mean itself?", a: ["1.0", "0.0", "-1.0"], ci: 1},
+        {q: "A Z-score of 4.0 is generally considered:", a: ["Normal", "Average", "An Outlier"], ci: 2},
+        {q: "The area under the entire normal curve is equal to:", a: ["0.5", "1.0", "100"], ci: 1},
+        {q: "Approximately what % of data is BELOW the mean in a Normal model?", a: ["25%", "50%", "75%"], ci: 1},
+        {q: "If a battery lasts 2 years, Mean is 2.5, SD is 0.32, what is Z?", a: ["-1.56", "1.56", "-0.50"], ci: 0},
+        {q: "The 75th percentile of reaction time (Mean 150, SD 10) is approx:", a: ["143", "150", "156.7", "160"], ci: 2},
+        {q: "What is the Z-score for a value that is 3 SDs below the mean?", a: ["3", "-3", "0"], ci: 1},
+        {q: "Standardizing data into Z-scores changes the shape of the distribution.", a: ["True", "False"], ci: 1},
+
+        // Topic: Correlation & Scatterplots (31-40)
+        {q: "Correlation (r) must be between which two values?", a: ["0 and 1", "-1 and 1", "-10 and 10"], ci: 1},
+        {q: "If r = -0.98, the relationship is:", a: ["Strong Positive", "Weak Negative", "Strong Negative"], ci: 2},
+        {q: "Does a correlation of 0.95 prove that X causes Y?", a: ["Yes", "No"], ci: 1},
+        {q: "Correlation is only used to describe what type of relationship?", a: ["Curved", "Linear", "Categorical"], ci: 1},
+        {q: "Adding an outlier that is far from the linear pattern will:", a: ["Increase r", "Decrease r", "Not affect r"], ci: 1},
+        {q: "Which is a condition for Correlation?", a: ["Must be Categorical", "Must be Linear", "No Outliers Required"], ci: 1},
+        {q: "If r = 0, there is no relationship at all.", a: ["True", "False (Only no linear)"], ci: 1},
+        {q: "Switching the X and Y axes changes the correlation coefficient.", a: ["True", "False"], ci: 1},
+        {q: "Which variable is 'Explanatory' in a scatterplot?", a: ["X-axis", "Y-axis"], ci: 0},
+        {q: "A 'lurking variable' can make two variables appear related when they aren't.", a: ["True", "False"], ci: 0},
+
+        // Topic: Displays & Graphs (41-50)
+        {q: "A Mosaic Plot is used to show the relationship between:", a: ["2 Quantitative", "2 Categorical", "1 of each"], ci: 1},
+        {q: "Side-by-side boxplots are best for:", a: ["2 Categorical", "Comparing 1 Quant across Categories", "2 Quant"], ci: 1},
+        {q: "In a boxplot, the line inside the box represents the:", a: ["Mean", "Median", "Mode"], ci: 1},
+        {q: "A distribution with two clear peaks is called:", a: ["Unimodal", "Bimodal", "Symmetric"], ci: 1},
+        {q: "Bar charts are used to graphically display which type of variable?", a: ["Quantitative", "Categorical", "Identifier"], ci: 1},
+        {q: "A Histogram with a long left tail is called:", a: ["Skewed Right", "Skewed Left", "Uniform"], ci: 1},
+        {q: "In a Mosaic Plot, if the bars align perfectly, there is:", a: ["Strong Relationship", "No Relationship"], ci: 1},
+        {q: "The 'Whiskers' of a boxplot usually extend to the:", a: ["Mean", "Max/Min (excluding outliers)", "SD"], ci: 1},
+        {q: "Which plot is used to check for Linearity?", a: ["Histogram", "Scatterplot", "Boxplot"], ci: 1},
+        {q: "If Z-scores are calculated for skewed data, the Z-scores are Normal.", a: ["True", "False"], ci: 1}
     ];
 
-    let currentStateIndex = 0;
+    let currentIdx = 0;
     let totalEV = 0;
 
+    function startGame() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-ui').classList.remove('hidden');
+        initMap();
+        loadQ();
+    }
+
     function initMap() {
-        const grid = document.getElementById('map-grid');
-        states.forEach((state, index) => {
+        const grid = document.getElementById('map-container');
+        states.forEach((s, i) => {
             const div = document.createElement('div');
-            div.className = 'state-chip';
-            div.id = `state-${index}`;
-            div.innerText = state.code;
-            div.title = `${state.name}: ${state.ev} Votes`;
+            div.className = 'state-box';
+            div.id = `s-${i}`;
+            div.innerText = s.c;
             grid.appendChild(div);
         });
     }
 
-    function loadQuestion() {
+    function loadQ() {
         if (totalEV >= 270) {
-            document.getElementById('quiz-area').classList.add('hidden');
+            document.getElementById('game-ui').classList.add('hidden');
             document.getElementById('win-screen').classList.remove('hidden');
             return;
         }
+        if (currentIdx >= 50) {
+            alert("End of questions! You finished with " + totalEV + " votes.");
+            return;
+        }
 
-        const state = states[currentStateIndex];
-        const question = questions[currentStateIndex];
+        const s = states[currentIdx];
+        const q = questions[currentIdx];
 
-        document.getElementById('target-state').innerText = state.name;
-        document.getElementById('state-votes').innerText = state.ev;
-        document.getElementById('question-text').innerText = `FOR ${state.name.toUpperCase()}: ${question.q}`;
+        document.getElementById('q-count').innerText = `Question ${currentIdx + 1} of 50`;
+        document.getElementById('st-name').innerText = s.n;
+        document.getElementById('st-ev').innerText = s.v;
+        document.getElementById('q-text').innerText = `FOR ${s.n.toUpperCase()}: ${q.q}`;
         
-        const optionsContainer = document.getElementById('options-container');
-        optionsContainer.innerHTML = '';
-        
-        question.a.forEach((opt, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'option';
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(i);
-            optionsContainer.appendChild(btn);
+        const optContainer = document.getElementById('options');
+        optContainer.innerHTML = '';
+        q.a.forEach((opt, i) => {
+            const b = document.createElement('button');
+            b.className = 'btn-opt';
+            b.innerText = opt;
+            b.onclick = () => checkAns(i);
+            optContainer.appendChild(b);
         });
     }
 
-    function checkAnswer(selected) {
-        const question = questions[currentStateIndex];
-        const feedback = document.getElementById('feedback');
+    function checkAns(choice) {
+        const q = questions[currentIdx];
+        const feed = document.getElementById('feedback');
         
-        if (selected === question.correct) {
-            feedback.style.color = "green";
-            feedback.innerText = "CORRECT! You won the state!";
-            totalEV += states[currentStateIndex].ev;
-            document.getElementById(`state-${currentStateIndex}`).classList.add('won');
+        if (choice === q.ci) {
+            feed.innerText = "CORRECT! State Won!";
+            feed.style.color = "green";
+            totalEV += states[currentIdx].v;
+            document.getElementById(`s-${currentIdx}`).classList.add('won');
             document.getElementById('total-ev').innerText = totalEV;
         } else {
-            feedback.style.color = "red";
-            feedback.innerText = "WRONG! The state goes to your opponent.";
+            feed.innerText = "WRONG! The state goes to the opponent.";
+            feed.style.color = "red";
+            document.getElementById(`s-${currentIdx}`).style.background = "#bf0a30"; // Red for lost
         }
 
-        currentStateIndex++;
+        currentIdx++;
         setTimeout(() => {
-            feedback.innerText = "";
-            loadQuestion();
-        }, 1500);
+            feed.innerText = "";
+            loadQ();
+        }, 1200);
     }
-
-    initMap();
-    loadQuestion();
 </script>
 
 </body>
