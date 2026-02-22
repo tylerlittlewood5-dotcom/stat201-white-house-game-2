@@ -1,79 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Race to the White House</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race to the White House - STAT 201 Review Game</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- D3 Library for US Map -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
 
-<header>
-  <h1>🏛️ Race to the White House</h1>
-  <p class="subtitle">STAT 201 Review Game</p>
-</header>
+    <header>
+        <h1>🏛️ Race to the White House</h1>
+        <p>STAT 201 Exam Review Game</p>
+    </header>
 
-<div id="main-container">
+    <!-- SCOREBOARD -->
+    <section id="scoreboard">
+        <div class="score-box player">
+            <h2>You</h2>
+            <p>States Won: <span id="playerStates">0</span></p>
+            <p>Electoral Votes: <span id="playerEV">0</span></p>
+        </div>
 
-  <!-- LEFT SIDE: MAP -->
-  <div id="map-section">
-    <h2>Electoral Map</h2>
+        <div class="score-box computer">
+            <h2>Opponent</h2>
+            <p>States Won: <span id="computerStates">0</span></p>
+            <p>Electoral Votes: <span id="computerEV">0</span></p>
+        </div>
+    </section>
 
-    <!-- SVG MAP -->
-    <object
-      id="us-map"
-      type="image/svg+xml"
-      data="us-map.svg">
-    </object>
+    <!-- MAP AREA -->
+    <section id="mapSection">
+        <h2>Electoral Map</h2>
+        <div id="usMap"></div>
+    </section>
 
-    <div id="scoreboard">
-      <p>Electoral Votes Won:</p>
-      <h2 id="score">0</h2>
-      <p id="states-won">States Won: 0 / 50</p>
-    </div>
-  </div>
+    <!-- QUESTION AREA -->
+    <section id="gameArea">
+        <h2 id="questionNumber">Question 1</h2>
 
-  <!-- RIGHT SIDE: QUESTIONS -->
-  <div id="game-section">
+        <div id="questionBox">
+            Loading question...
+        </div>
 
-    <div id="instructions">
-      <h2>How to Play</h2>
-      <p>
-        Answer statistics questions correctly to win states and collect
-        electoral votes. Wrong answers lose the state!
-        Reach the highest electoral vote total to win the election.
-      </p>
-    </div>
+        <div id="answers">
+            <!-- Buttons inserted by JavaScript -->
+        </div>
 
-    <div id="question-container" style="display:none;">
-      <h2 id="state-name"></h2>
-      <p id="question"></p>
+        <button id="nextBtn" onclick="nextQuestion()" disabled>
+            Next Question →
+        </button>
+    </section>
 
-      <div id="answers"></div>
+    <!-- RESULT SCREEN -->
+    <section id="resultScreen" style="display:none;">
+        <h2 id="finalResult"></h2>
+        <p id="finalScore"></p>
 
-      <p id="feedback"></p>
-    </div>
+        <button onclick="restartGame()">Play Again</button>
+    </section>
 
-    <div id="controls">
-      <button id="start-btn" onclick="startGame()">Start Campaign</button>
-      <button id="next-btn" onclick="nextQuestion()" style="display:none;">
-        Next State →
-      </button>
-    </div>
-
-  </div>
-
-</div>
-
-<footer>
-  <p>STAT 201 • Race to the White House Review Game</p>
-</footer>
-
-<script src="states.js"></script>
-<script src="questions.js"></script>
-<script src="script.js"></script>
+    <!-- GAME SCRIPT -->
+    <script src="script.js"></script>
 
 </body>
 </html>
-
-
