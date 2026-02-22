@@ -1,72 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Race to the White House - STAT 201 Review Game</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Race to the White House - STAT 201</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <!-- D3 Library for US Map -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
 
-    <header>
-        <h1>🏛️ Race to the White House</h1>
-        <p>STAT 201 Exam Review Game</p>
-    </header>
+<h1>🇺🇸 Race to the White House 🇺🇸</h1>
+<p>Answer statistics questions to win electoral votes. First to 270 wins!</p>
 
-    <!-- SCOREBOARD -->
-    <section id="scoreboard">
-        <div class="score-box player">
-            <h2>You</h2>
-            <p>States Won: <span id="playerStates">0</span></p>
-            <p>Electoral Votes: <span id="playerEV">0</span></p>
+<div id="game">
+
+    <div id="scoreboard">
+        <h2>Your Electoral Votes: <span id="ev">0</span></h2>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
         </div>
+    </div>
 
-        <div class="score-box computer">
-            <h2>Opponent</h2>
-            <p>States Won: <span id="computerStates">0</span></p>
-            <p>Electoral Votes: <span id="computerEV">0</span></p>
-        </div>
-    </section>
+    <div id="question-box">
+        <h3 id="question">Loading question...</h3>
+        <div id="answers"></div>
+    </div>
 
-    <!-- MAP AREA -->
-    <section id="mapSection">
-        <h2>Electoral Map</h2>
-        <div id="usMap"></div>
-    </section>
+    <button id="nextBtn" onclick="nextQuestion()" disabled>
+        Next Question
+    </button>
 
-    <!-- QUESTION AREA -->
-    <section id="gameArea">
-        <h2 id="questionNumber">Question 1</h2>
+    <h2 id="result"></h2>
 
-        <div id="questionBox">
-            Loading question...
-        </div>
+</div>
 
-        <div id="answers">
-            <!-- Buttons inserted by JavaScript -->
-        </div>
-
-        <button id="nextBtn" onclick="nextQuestion()" disabled>
-            Next Question →
-        </button>
-    </section>
-
-    <!-- RESULT SCREEN -->
-    <section id="resultScreen" style="display:none;">
-        <h2 id="finalResult"></h2>
-        <p id="finalScore"></p>
-
-        <button onclick="restartGame()">Play Again</button>
-    </section>
-
-    <!-- GAME SCRIPT -->
-    <script src="script.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
