@@ -1,1 +1,35 @@
+body{
+    font-family: Arial;
+    background:#0b1f3a;
+    color:white;
+    text-align:center;
+}
+
+h1{
+    color:#ffd700;
+}
+
+#scoreboard{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    font-size:20px;
+    margin:20px;
+}
+
+button{
+    padding:12px;
+    margin:8px;
+    font-size:16px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+}
+
+.correct{ background:#2ecc71; }
+.wrong{ background:#e74c3c; }
+
+#answers{
+    margin-top:20px;
+}
 
