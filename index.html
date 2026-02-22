@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Race to the White House</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>🏛️ Race to the White House — STAT 201</h1>
+
+<div id="scoreboard">
+    <div>You: <span id="playerVotes">0</span></div>
+    <div>Opponent: <span id="cpuVotes">0</span></div>
+    <div>Needed to Win: 270</div>
+</div>
+
+<div id="timer">Time: 15</div>
+
+<h2 id="question">Press Start to Begin</h2>
+
+<div id="answers"></div>
+
+<button onclick="startGame()">Start Campaign</button>
+
+<h2 id="status"></h2>
+
+<script src="states.js"></script>
+<script src="questions.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
+
 
